@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/
+
+# Processed data
+data/processed/*.npy
+
+# Models
+models/*.pkl
+
+# Outputs
+outputs/
+
+# Logs
+logs/
+
+# MLflow
+mlruns/
+mlflow.db
+
+# Generated artifacts
+artifacts/
