@@ -1,9 +1,5 @@
 {
     "dataset_name": "Telco Customer Churn",
-    "original_shape": [
-        7044,
-        21
-    ],
     "train_shape": [
         5635,
         30
@@ -34,8 +30,5 @@
         "Contract",
         "PaperlessBilling",
         "PaymentMethod"
-    ],
-    "target": "Churn",
-    "test_size": 0.2,
-    "random_state": 42
+    ]
 }

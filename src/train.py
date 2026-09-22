@@ -1,4 +1,3 @@
-import os
 import numpy as np
 import joblib
 
@@ -7,70 +6,40 @@ from sklearn.ensemble import RandomForestClassifier
 
 def run_training():
 
-    print("=" * 60)
-    print("LAB 2: MODEL TRAINING")
-    print("=" * 60)
+    print("Starting Model Training...")
 
-    # ---------------------------------------------------------
-    # 1. LOAD PROCESSED DATA
-    # ---------------------------------------------------------
-
-    X_train = np.load(
-        "data/processed/X_train_final.npy"
+    # Load processed training data
+    X_train_final = np.load(
+        'data/processed/X_train_final.npy'
     )
 
     y_train = np.load(
-        "data/processed/y_train.npy"
+        'data/processed/y_train.npy'
     )
 
-    print("\nTraining data shape:", X_train.shape)
-    print("Target shape:", y_train.shape)
-
-    # ---------------------------------------------------------
-    # 2. CREATE RANDOM FOREST MODEL
-    # ---------------------------------------------------------
-
+    # Create Random Forest
     model = RandomForestClassifier(
         n_estimators=100,
         max_depth=10,
         random_state=42,
-        class_weight="balanced"
+        class_weight='balanced'
     )
 
-    print("\nTraining Random Forest...")
-
-    # ---------------------------------------------------------
-    # 3. TRAIN
-    # ---------------------------------------------------------
-
+    # Train
     model.fit(
-        X_train,
+        X_train_final,
         y_train
     )
 
-    print("Training completed.")
-
-    # ---------------------------------------------------------
-    # 4. SAVE MODEL
-    # ---------------------------------------------------------
-
-    os.makedirs("models", exist_ok=True)
-
-    model_path = (
-        "models/random_forest_baseline.pkl"
-    )
-
+    # Save model
     joblib.dump(
         model,
-        model_path
+        'models/random_forest_baseline.pkl'
     )
 
-    print("\nModel saved at:")
-    print(model_path)
-
-    print("\n" + "=" * 60)
-    print("LAB 2 TRAINING COMPLETED")
-    print("=" * 60)
+    print(
+        "Model training complete and saved to disk!"
+    )
 
 
 if __name__ == "__main__":

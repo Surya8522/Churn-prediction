@@ -1,162 +1,108 @@
-import os
 import numpy as np
 import pandas as pd
 import joblib
 
 from sklearn.model_selection import train_test_split
-
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
     recall_score,
-    f1_score,
-    confusion_matrix,
-    classification_report
+    f1_score
 )
 
 
 def run_evaluation():
 
-    print("=" * 60)
-    print("LAB 2: MODEL EVALUATION")
-    print("=" * 60)
+    print("Starting Model Evaluation...")
 
-    # ---------------------------------------------------------
-    # 1. LOAD TEST DATA
-    # ---------------------------------------------------------
-
-    X_test = np.load(
-        "data/processed/X_test_final.npy"
+    # Load test data
+    X_test_final = np.load(
+        'data/processed/X_test_final.npy'
     )
 
     y_test = np.load(
-        "data/processed/y_test.npy"
+        'data/processed/y_test.npy'
     )
 
-    # ---------------------------------------------------------
-    # 2. LOAD MODEL
-    # ---------------------------------------------------------
-
+    # Load trained model
     model = joblib.load(
-        "models/random_forest_baseline.pkl"
+        'models/random_forest_baseline.pkl'
     )
 
-    print("\nModel loaded successfully.")
+    # Predictions
+    y_pred = model.predict(X_test_final)
 
-    # ---------------------------------------------------------
-    # 3. PREDICTIONS
-    # ---------------------------------------------------------
-
-    y_pred = model.predict(X_test)
-
-    # ---------------------------------------------------------
-    # 4. METRICS
-    # ---------------------------------------------------------
-
-    accuracy = accuracy_score(
+    # Metrics
+    acc = accuracy_score(
         y_test,
         y_pred
     )
 
-    precision = precision_score(
+    prec = precision_score(
         y_test,
-        y_pred,
-        zero_division=0
+        y_pred
     )
 
-    recall = recall_score(
+    rec = recall_score(
         y_test,
-        y_pred,
-        zero_division=0
+        y_pred
     )
 
     f1 = f1_score(
         y_test,
-        y_pred,
-        zero_division=0
+        y_pred
     )
 
-    print("\n--- MODEL EVALUATION REPORT ---")
-
-    print(f"Accuracy : {accuracy:.4f}")
-    print(f"Precision: {precision:.4f}")
-    print(f"Recall   : {recall:.4f}")
+    print("\n--- Model Evaluation Report ---")
+    print(f"Accuracy : {acc:.4f}")
+    print(f"Precision: {prec:.4f}")
+    print(f"Recall   : {rec:.4f}")
     print(f"F1-Score : {f1:.4f}")
+    print("-------------------------------\n")
 
-    print("\nClassification Report:")
-    print(
-        classification_report(
-            y_test,
-            y_pred,
-            zero_division=0
-        )
-    )
-
-    print("\nConfusion Matrix:")
-    print(
-        confusion_matrix(
-            y_test,
-            y_pred
-        )
-    )
-
-    # ---------------------------------------------------------
-    # 5. ERROR ANALYSIS
-    # ---------------------------------------------------------
-
+    # Load raw dataset for error analysis
     df = pd.read_csv(
-        "data/raw/churn.csv"
+        'data/raw/churn.csv'
     )
 
-    # Same split used during preprocessing
     _, X_test_raw = train_test_split(
-        df.drop("Churn", axis=1),
-        test_size=0.20,
+        df.drop('Churn', axis=1),
+        test_size=0.2,
         random_state=42,
-        stratify=df["Churn"]
+        stratify=df['Churn']
     )
 
-    errors = X_test_raw.copy()
+    errors_df = X_test_raw.copy()
 
-    errors["Actual_Churn"] = y_test
-    errors["Predicted_Churn"] = y_pred
+    errors_df['Actual_Churn'] = y_test
+    errors_df['Predicted_Churn'] = y_pred
 
-    false_negatives = errors[
-        (errors["Actual_Churn"] == 1) &
-        (errors["Predicted_Churn"] == 0)
+    # False negatives
+    false_negatives = errors_df[
+        (errors_df['Actual_Churn'] == 1) &
+        (errors_df['Predicted_Churn'] == 0)
     ]
 
-    false_positives = errors[
-        (errors["Actual_Churn"] == 0) &
-        (errors["Predicted_Churn"] == 1)
+    # False positives
+    false_positives = errors_df[
+        (errors_df['Actual_Churn'] == 0) &
+        (errors_df['Predicted_Churn'] == 1)
     ]
 
-    os.makedirs(
-        "outputs",
-        exist_ok=True
-    )
-
+    # Save error analysis
     false_negatives.to_csv(
-        "outputs/false_negatives.csv",
+        'outputs/false_negatives.csv',
         index=False
     )
 
     false_positives.to_csv(
-        "outputs/false_positives.csv",
+        'outputs/false_positives.csv',
         index=False
     )
 
-    print("\nFalse Negatives:",
-          len(false_negatives))
-
-    print("False Positives:",
-          len(false_positives))
-
-    print("\nError analysis files saved.")
-
-    print("\n" + "=" * 60)
-    print("LAB 2 EVALUATION COMPLETED")
-    print("=" * 60)
+    print(
+        "Evaluation complete and error analysis files saved!"
+    )
 
 
 if __name__ == "__main__":
