@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import joblib
 
@@ -6,40 +7,70 @@ from sklearn.ensemble import RandomForestClassifier
 
 def run_training():
 
-    print("Starting Model Training...")
+    print("=" * 60)
+    print("LAB 2: MODEL TRAINING")
+    print("=" * 60)
 
-    # Load processed training data
-    X_train_final = np.load(
-        'data/processed/X_train_final.npy'
+    # ---------------------------------------------------------
+    # 1. LOAD PROCESSED DATA
+    # ---------------------------------------------------------
+
+    X_train = np.load(
+        "data/processed/X_train_final.npy"
     )
 
     y_train = np.load(
-        'data/processed/y_train.npy'
+        "data/processed/y_train.npy"
     )
 
-    # Create Random Forest
+    print("\nTraining data shape:", X_train.shape)
+    print("Target shape:", y_train.shape)
+
+    # ---------------------------------------------------------
+    # 2. CREATE RANDOM FOREST MODEL
+    # ---------------------------------------------------------
+
     model = RandomForestClassifier(
         n_estimators=100,
         max_depth=10,
         random_state=42,
-        class_weight='balanced'
+        class_weight="balanced"
     )
 
-    # Train
+    print("\nTraining Random Forest...")
+
+    # ---------------------------------------------------------
+    # 3. TRAIN
+    # ---------------------------------------------------------
+
     model.fit(
-        X_train_final,
+        X_train,
         y_train
     )
 
-    # Save model
-    joblib.dump(
-        model,
-        'models/random_forest_baseline.pkl'
+    print("Training completed.")
+
+    # ---------------------------------------------------------
+    # 4. SAVE MODEL
+    # ---------------------------------------------------------
+
+    os.makedirs("models", exist_ok=True)
+
+    model_path = (
+        "models/random_forest_baseline.pkl"
     )
 
-    print(
-        "Model training complete and saved to disk!"
+    joblib.dump(
+        model,
+        model_path
     )
+
+    print("\nModel saved at:")
+    print(model_path)
+
+    print("\n" + "=" * 60)
+    print("LAB 2 TRAINING COMPLETED")
+    print("=" * 60)
 
 
 if __name__ == "__main__":
