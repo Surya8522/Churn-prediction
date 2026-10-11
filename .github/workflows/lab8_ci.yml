@@ -1,0 +1,54 @@
+name: Lab 8 - Churn Prediction CI
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "src/**"
+      - "config.yaml"
+      - "requirements.txt"
+      - "data/raw/churn.csv"
+      - ".github/workflows/lab8_ci.yml"
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  churn-prediction-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Verify configuration
+        run: |
+          python -c "import yaml; c=yaml.safe_load(open('config.yaml')); print('Config loaded:', c['project']['name'])"
+
+      - name: Run model evaluation
+        run: python src/evaluate_model.py
+
+      - name: Run quality gate
+        run: python src/quality_gate.py
+
+      - name: Upload CI reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: churn-prediction-ci-reports
+          if-no-files-found: warn
+          path: |
+            reports/
+            artifacts/

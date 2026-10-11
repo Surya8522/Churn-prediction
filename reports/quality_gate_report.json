@@ -1,0 +1,6 @@
+{
+    "status": "PASSED",
+    "metric": "recall",
+    "actual_value": 0.767379679144385,
+    "minimum_value": 0.5
+}
