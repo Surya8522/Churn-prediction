@@ -1,0 +1,42 @@
+name: Lab 9 - Churn Prediction Failure Tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  failure-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run model evaluation
+        run: python src/evaluate_model.py
+
+      - name: Run quality gate
+        run: python src/quality_gate.py
+
+      - name: Run failure-injection checks
+        run: python src/failure_injection.py
+
+      - name: Upload failure test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab9-failure-test-reports
+          if-no-files-found: warn
+          path: |
+            reports/
+            artifacts/
+            logs/

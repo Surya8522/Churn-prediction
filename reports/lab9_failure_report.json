@@ -1,0 +1,28 @@
+{
+    "project": "Telco_Churn_Prediction",
+    "tests_total": 4,
+    "tests_passed": 4,
+    "tests_failed": 0,
+    "results": [
+        {
+            "test": "missing_dataset",
+            "status": "PASSED",
+            "detail": "Missing dataset was detected"
+        },
+        {
+            "test": "missing_model_artifact",
+            "status": "PASSED",
+            "detail": "Missing model artifact path checked without modifying real models"
+        },
+        {
+            "test": "invalid_dataset_schema",
+            "status": "PASSED",
+            "detail": "Missing required columns detected: ['Churn', 'MonthlyCharges', 'customerID']"
+        },
+        {
+            "test": "missing_processed_features",
+            "status": "PASSED",
+            "detail": "Missing processed-data path checked without changing existing arrays"
+        }
+    ]
+}

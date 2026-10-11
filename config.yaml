@@ -1,0 +1,48 @@
+# Telco Customer Churn MLOps Configuration
+
+project:
+  name: Telco_Churn_Prediction
+  random_state: 42
+
+data:
+  raw_path: data/raw/churn.csv
+  processed_dir: data/processed
+  test_size: 0.2
+
+paths:
+  preprocessor: models/preprocessor.pkl
+  baseline_model: models/random_forest_baseline.pkl
+  production_model: models/random_forest_model.pkl
+  artifacts_dir: artifacts
+  reports_dir: reports
+  logs_dir: logs
+  evaluation_report: reports/evaluation_report.json
+  failure_report: reports/lab9_failure_report.json
+  quality_gate_report: reports/quality_gate_report.json
+  production_report: artifacts/production_model_report.json
+
+model:
+  name: Telco_Churn_Production_Model
+  family: RandomForest
+  params:
+    n_estimators: 200
+    max_depth: 15
+    random_state: 42
+    class_weight: balanced
+
+evaluation:
+  metric: recall
+  minimum_value: 0.50
+
+mlflow:
+  experiment_name: Telco_Churn_Prediction
+  tracking_uri: sqlite:///mlflow.db
+
+lifecycle:
+  metric: recall
+  staging_stage: Staging
+  production_stage: Production
+  archive_stage: Archived
+
+lab9:
+  repetitions: 1
