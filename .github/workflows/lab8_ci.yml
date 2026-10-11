@@ -35,15 +35,27 @@ jobs:
 
       - name: Verify configuration
         run: |
-          python -c "import yaml; c=yaml.safe_load(open('config.yaml')); print('Config loaded:', c['project']['name'])"
+          python -c "import yaml; c=yaml.safe_load(open('config.yaml', encoding='utf-8')); print('Config loaded:', c['project']['name'])"
 
-      - name: Run model evaluation
+      - name: Validate raw dataset
+        run: python src/validate_data.py
+
+      - name: Preprocess dataset
+        run: python src/preprocess_pipeline.py
+
+      - name: Validate processed data
+        run: python src/validate_outputs.py
+
+      - name: Train model and log experiment
+        run: python src/train_mlflow.py
+
+      - name: Evaluate model
         run: python src/evaluate_model.py
 
       - name: Run quality gate
         run: python src/quality_gate.py
 
-      - name: Upload CI reports
+      - name: Upload CI reports and artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -52,3 +64,5 @@ jobs:
           path: |
             reports/
             artifacts/
+            outputs/
+            logs/
