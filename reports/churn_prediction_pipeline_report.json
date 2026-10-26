@@ -1,0 +1,30 @@
+{
+    "project": "Telco_Churn_Prediction",
+    "status": "PASSED",
+    "stages": [
+        {
+            "stage": "Validate raw dataset",
+            "status": "PASSED"
+        },
+        {
+            "stage": "Preprocess dataset",
+            "status": "PASSED"
+        },
+        {
+            "stage": "Validate processed data",
+            "status": "PASSED"
+        },
+        {
+            "stage": "Train model with MLflow",
+            "status": "PASSED"
+        },
+        {
+            "stage": "Evaluate model",
+            "status": "PASSED"
+        },
+        {
+            "stage": "Run quality gate",
+            "status": "PASSED"
+        }
+    ]
+}
