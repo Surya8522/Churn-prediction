@@ -8,3 +8,5 @@ ipykernel
 mlflow
 PyYAML
 pandera
+flask==3.1.3
+scipy
