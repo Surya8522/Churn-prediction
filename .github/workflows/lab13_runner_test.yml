@@ -1,0 +1,48 @@
+
+name: Lab 13 - Self Hosted Runner Test
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test-runner:
+    runs-on: [self-hosted, Windows, X64]
+
+    steps:
+      - name: Check Python
+        shell: powershell
+        run: python --version
+
+      - name: Check Git
+        shell: powershell
+        run: git --version
+
+      - name: Check Docker
+        shell: powershell
+        run: docker info
+
+      - name: Check Kubernetes
+        shell: powershell
+        run: kubectl get nodes
+
+      - name: Check Project
+        shell: powershell
+        run: |
+          $Documents = [Environment]::GetFolderPath("MyDocuments")
+          $ProjectRoot = Join-Path $Documents "241FA18030\churn_pridiction"
+
+          Write-Host "Runner: $env:RUNNER_NAME"
+          Write-Host "Workspace: $env:GITHUB_WORKSPACE"
+
+          if (!(Test-Path "$ProjectRoot\.venv\Scripts\python.exe")) {
+              throw "Project Python environment not found."
+          }
+
+          if (!(Test-Path "$ProjectRoot\src\12_monitor_trigger.py")) {
+              throw "Lab 13 script not found."
+          }
+
+          Write-Host "Project structure verified."
