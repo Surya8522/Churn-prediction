@@ -19,6 +19,12 @@ jobs:
 
           Set-Location $ProjectRoot
 
+          # Fix Python UTF-8 encoding
+          $env:PYTHONIOENCODING = "utf-8"
+          $env:PYTHONUTF8 = "1"
+          [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+          $OutputEncoding = [Console]::OutputEncoding
+
           $Python = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
           $Script = Join-Path $ProjectRoot "src\12_monitor_trigger.py"
 
@@ -41,13 +47,19 @@ jobs:
         run: |
           $Documents = [Environment]::GetFolderPath("MyDocuments")
           $ProjectRoot = Join-Path $Documents "241FA18030\churn_pridiction"
+
+          $env:PYTHONIOENCODING = "utf-8"
+          $env:PYTHONUTF8 = "1"
+          [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+          $OutputEncoding = [Console]::OutputEncoding
+
           $Report = Join-Path $ProjectRoot "outputs\monitoring\monitor_trigger_report.json"
 
           if (!(Test-Path $Report)) {
               throw "Monitoring report not found."
           }
 
-          Get-Content $Report
+          Get-Content -Path $Report -Encoding UTF8
 
       - name: Verify Kubernetes
         shell: powershell
