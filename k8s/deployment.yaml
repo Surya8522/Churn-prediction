@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: churn-prediction-deployment
+  labels:
+    app: churn-prediction
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: churn-prediction
+  template:
+    metadata:
+      labels:
+        app: churn-prediction
+    spec:
+      containers:
+        - name: churn-prediction-api
+          image: docker.io/library/churn-prediction-api:1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 20
+            periodSeconds: 20
+                      resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"

@@ -2,7 +2,7 @@
 
 ## 📌 Project Overview
 
-This project implements a machine learning pipeline to predict whether a telecom customer is likely to churn.
+This project implements a Machine Learning pipeline to predict whether a telecom customer is likely to churn.
 
 The project demonstrates an end-to-end MLOps workflow, including:
 
@@ -17,6 +17,9 @@ The project demonstrates an end-to-end MLOps workflow, including:
 - Reproducibility validation
 - Automated CI workflows using GitHub Actions
 - Failure-injection testing and report generation
+- Flask REST API deployment
+- Docker containerization
+- Kubernetes deployment
 
 ## 🎯 Objectives
 
@@ -33,6 +36,8 @@ The main objectives of this project are:
 9. Apply quality gates to model evaluation results.
 10. Automate validation and testing through GitHub Actions.
 11. Generate reports for evaluation and failure tests.
+12. Deploy the trained model through a Flask API.
+13. Containerize and deploy the API using Docker and Kubernetes.
 
 ## 🛠️ Technologies Used
 
@@ -45,6 +50,9 @@ The main objectives of this project are:
 - **Model Serialization:** Joblib
 - **Version Control:** Git and GitHub
 - **Automation:** GitHub Actions
+- **API:** Flask
+- **Containerization:** Docker
+- **Orchestration:** Kubernetes
 - **Development Environment:** VS Code, Jupyter Notebook
 
 ## 📂 Project Structure
@@ -100,6 +108,13 @@ churn_pridiction/
 ├── artifacts/
 │   └── Generated model registry reports
 │
+├── deployment/
+│   └── app.py
+│
+├── k8s/
+│   ├── deployment.yaml
+│   └── service.yaml
+│
 ├── config.yaml
 ├── requirements.txt
 ├── .gitignore
@@ -120,14 +135,14 @@ The dataset is processed to prepare numerical and categorical features for machi
 
 ## ⚙️ Installation and Setup
 
-### 1. Clone the repository
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/Surya8522/Churn-prediction.git
 cd Churn-prediction
 ```
 
-### 2. Create a virtual environment
+### 2. Create a Virtual Environment
 
 ```bash
 python -m venv churn-mlops
@@ -139,14 +154,14 @@ Activate it on Windows PowerShell:
 .\churn-mlops\Scripts\Activate.ps1
 ```
 
-### 3. Install dependencies
+### 3. Install Dependencies
 
-```bash
+```powershell
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 4. Check the configuration
+### 4. Check the Configuration
 
 Project settings are maintained in `config.yaml`, including data paths, model parameters, MLflow settings, evaluation thresholds, and report locations.
 
@@ -154,7 +169,7 @@ Project settings are maintained in `config.yaml`, including data paths, model pa
 
 The project is organized into progressive lab stages.
 
-| Lab | Main activity |
+| Lab | Main Activity |
 |---|---|
 | Labs 1–2 | Dataset exploration and preprocessing foundations |
 | Lab 3 | Baseline model training and evaluation |
@@ -309,6 +324,134 @@ The main reports are stored in the `reports/` directory:
 | `lab9_failure_report.json` | Results of failure-injection checks |
 
 Additional model registry reports may be generated under `artifacts/`.
+
+## 🚀 API Deployment
+
+The trained Telco Customer Churn model is deployed using a Flask REST API.
+
+### API File
+
+```text
+deployment/
+└── app.py
+```
+
+### API Endpoints
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/` | Display API information |
+| GET | `/health` | Check API and model status |
+| POST | `/predict` | Predict whether a customer is likely to churn |
+
+### Run the API
+
+From the project directory, run:
+
+```powershell
+python deployment\app.py
+```
+
+The API runs on port `5000`.
+
+Local API URL:
+
+```text
+http://127.0.0.1:5000
+```
+
+Health-check URL:
+
+```text
+http://127.0.0.1:5000/health
+```
+
+## 🐳 Docker Deployment
+
+The Flask API is packaged as a Docker image.
+
+The project image used for deployment is:
+
+```text
+churn-prediction-api:1.0
+```
+
+Run the container:
+
+```powershell
+docker run -d --name churn-api -p 8000:8000 churn-prediction-api:1.0
+```
+
+Check the running container:
+
+```powershell
+docker ps
+```
+
+View container logs:
+
+```powershell
+docker logs churn-api
+```
+
+*Note: The Docker command above reflects the container configuration used during testing. The API's internal port and published host port must match the Docker image configuration.*
+
+## ☸️ Kubernetes Deployment
+
+The Dockerized churn prediction API is deployed on Kubernetes.
+
+### Kubernetes Resources
+
+| Resource | Name |
+|---|---|
+| Deployment | `churn-prediction-deployment` |
+| Service | `churn-prediction-service` |
+| NodePort | `30080` |
+
+### Check Kubernetes Resources
+
+```powershell
+kubectl get deployments
+kubectl get pods -o wide
+kubectl get services
+```
+
+### Access the API Using Port Forwarding
+
+Run:
+
+```powershell
+kubectl port-forward service/churn-prediction-service 5001:5000
+```
+
+Keep the port-forwarding terminal open while accessing the API.
+
+API URL:
+
+```text
+http://127.0.0.1:5001
+```
+
+Health-check URL:
+
+```text
+http://127.0.0.1:5001/health
+```
+
+The Kubernetes deployment was created, and the application pod reached the `Running` state.
+
+## 📌 Deployment Status
+
+| Component | Status |
+|---|---|
+| Flask REST API | Implemented |
+| Health Check | Available |
+| Single Prediction API | Implemented |
+| Docker Image | Built |
+| Docker Container | Run command documented |
+| Kubernetes Deployment | Created |
+| Kubernetes Service | Configured |
+| Kubernetes Pod | Running |
 
 ## 👨‍💻 Author
 

@@ -1,0 +1,9 @@
+{
+    "model_name": "Churn_Prediction_Random_Forest",
+    "model_version": "1",
+    "model_type": "RandomForestClassifier",
+    "model_source": "models/random_forest_model.pkl",
+    "preprocessor_source": "models/preprocessor.pkl",
+    "deployment_status": "prepared",
+    "deployment_timestamp": "2026-11-01T04:22:29.339267+00:00"
+}

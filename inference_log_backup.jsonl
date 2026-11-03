@@ -1,0 +1,1 @@
+{"request_id": "1850416a-b7b6-41a7-94f4-618a95408a18", "timestamp": "2026-11-01T05:16:20.900146+00:00", "prediction": 0, "churn_probability": 0.14919065204024784, "latency_ms": 51.67, "status": "success", "error": null, "model_name": "Telco_Churn_Production_Model", "model_version": "1"}

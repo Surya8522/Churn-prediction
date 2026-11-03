@@ -1,0 +1,12 @@
+Stage 1 - Basic FastAPI app
+Stage 2 - Health endpoint
+Stage 3 - ModelLoader
+Stage 4 - Metadata endpoint
+Stage 5 - Prediction endpoint
+Stage 6 - Pydantic schemas
+Stage 7 - Input validation
+Stage 8 - Batch prediction
+Stage 9 - API testing
+Stage 10 - Invalid input testing
+Stage 11 - Performance and reliability
+Stage 12 - Reports and documentation
