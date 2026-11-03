@@ -35,3 +35,5 @@ artifacts/
 # MLflow backup databases
 mlflow_backup.db
 mlflow_old.db
+# Docker image backup
+churn-image.tar
